@@ -1,15 +1,15 @@
 import * as expressControllers from "@/express/controllers";
 import * as expressMiddleware from "@/express/middleware";
-import { Records } from "@/services/records";
+import { Orders } from "@/services/orders";
 import { Users } from "@/services/users";
 import { ConfigInterface } from "@/config";
 
 import { ResponseBuilder } from "@/lib/express/responseBuilder";
 import { createAndWrapClasses } from "instawrap";
-import { CentralLimitOrderBook } from "@/services/centralLimitOrderBook";
+import { Limit } from "@/services/limit";
 
 export interface ServicesInterface {
-  records: Records;
+  records: Orders;
   users: Users;
   responseBuilder: ResponseBuilder;
 }
@@ -21,7 +21,7 @@ export interface ExpressMiddlewareInterface {
 
 export interface ExpressControllersInterface {
   user: expressControllers.User;
-  records: expressControllers.Records;
+  records: expressControllers.Orders;
 }
 
 /**
@@ -63,11 +63,11 @@ export class ServiceManager {
     const responseBuilder = new ResponseBuilder({});
 
     const users = new Users();
-    const centralLimitOrderBook = new CentralLimitOrderBook();
+    const limits = new Limit();
 
-    const records = new Records({
+    const records = new Orders({
       users,
-      centralLimitOrderBook,
+      limits,
     });
 
     return {
