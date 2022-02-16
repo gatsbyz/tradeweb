@@ -17,7 +17,7 @@ export class Limit extends ValidatedBase implements LimitInterface {
    * @param {LimitInterface} params
    * @param {boolean} validate
    */
-  constructor(limitPrice: number, validate = true) {
+  constructor(limitPrice: number) {
     super();
 
     this.limitPrice = limitPrice;
@@ -32,10 +32,6 @@ export class Limit extends ValidatedBase implements LimitInterface {
       tail: null,
       color: null
     };
-
-    if (validate) {
-      this.validate();
-    }
   }
 
   limitPrice: number;

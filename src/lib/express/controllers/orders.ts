@@ -38,9 +38,9 @@ export class Orders {
    * @returns {Promise<Order>}
    */
   create(request): Order {
-    const record = new CreateOrder(request.body);
+    const order = new CreateOrder(request.body);
 
-    return this.services.records.create(Order.create(record));
+    return this.services.records.create(Order.create(order));
   }
 
   /**

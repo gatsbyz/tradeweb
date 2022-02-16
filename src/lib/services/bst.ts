@@ -19,9 +19,9 @@ export class BinarySearchTree {
    * @param {any} value node's value to insert in the tree
    * @returns {BinaryTreeNode} newly added node
    */
-  add(value) {
-    let node = new BinaryTreeNode(value);
-
+  add(node) {
+    // let node = new BinaryTreeNode(value);
+    const value = node.value;
     if (this.root) {
       const { found, parent } = this.findNodeAndParent(value); // <1>
       if (found) { // duplicated: value already exist on the tree

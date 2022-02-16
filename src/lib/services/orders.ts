@@ -1,14 +1,12 @@
 import { Order } from "@/models/order";
 
-import { Users } from "@/services/users";
 import Err from "err";
 import HTTP_STATUS from "http-status";
 import { DateTime } from "luxon";
-import { Limit } from "@/services/limit";
+import { Limits } from "@/services/limits";
 
 interface ServiceInterface {
-  users: Users;
-  limits: Limit;
+  limits: Limits;
 }
 
 export class Orders {
@@ -30,11 +28,11 @@ export class Orders {
    * @param {string} userId
    * @returns {Promise<void>}
    */
-  async assertUserExists(userId: string): Promise<void> {
-    if (!(await this.services.users.exists(userId))) {
-      throw new Err(`user: ${userId} not found`, HTTP_STATUS.NOT_FOUND);
-    }
-  }
+  // async assertUserExists(userId: string): Promise<void> {
+  //   if (!(await this.services.users.exists(userId))) {
+  //     throw new Err(`user: ${userId} not found`, HTTP_STATUS.NOT_FOUND);
+  //   }
+  // }
 
   /**
    * Assert that user owns record
@@ -51,12 +49,6 @@ export class Orders {
     }
   }
 
-  /**
-   * Create record in db
-   *
-   * @param {Order} record
-   * @returns {Promise<Order>}
-   */
   create(order: Order): Order {
     // await this.assertUserExists(record.trader); // useful
     this.orders[order.id] = order;

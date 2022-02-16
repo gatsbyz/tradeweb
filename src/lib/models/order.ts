@@ -5,7 +5,7 @@ import { DateTime } from "luxon";
 import { toDate } from "simple-cached-firestore";
 import { CreateOrder } from "@/requests/createOrder";
 import { v4 as uuid } from 'uuid';
-import {Limit} from "@/services/limit";
+import {Limit} from "@/models/limit";
 
 export enum RECORD_TYPE {
   BUY = "buy",
@@ -30,7 +30,7 @@ export class Order extends ValidatedBase implements OrderInterface {
    * @param {OrderInterface} params
    * @param {boolean} validate
    */
-  constructor(params: OrderInterface, validate = true) {
+  constructor(params: OrderInterface) {
     super();
 
     this.id = uuid();
@@ -44,10 +44,6 @@ export class Order extends ValidatedBase implements OrderInterface {
     this.prev = null;
     this.createdAt = toDate(params.createdAt);
     this.updatedAt = toDate(params.updatedAt);
-
-    if (validate) {
-      this.validate();
-    }
   }
 
   @IsString()

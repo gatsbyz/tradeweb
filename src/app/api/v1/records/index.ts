@@ -10,9 +10,9 @@ export default (
   controllers: ExpressControllersInterface
 ): Router => {
   const router = Router();
-  router.put("/", controllers.records.create);
-  router.put("/batch", controllers.records.batchCreate);
-  router.put("/:recordId", controllers.records.patch);
-  router.delete("/:recordId", controllers.records.remove);
+  router.put("/", controllers.orders.create);
+  router.put("/batch", controllers.orders.batchCreate);
+  // router.put("/:recordId", controllers.orders.patch);
+  // router.delete("/:recordId", controllers.orders.remove);
   return router;
 };
