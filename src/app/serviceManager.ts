@@ -3,11 +3,11 @@ import * as expressMiddleware from "@/express/middleware";
 import { Limits } from "@/services/limits";
 import { Orders } from "@/services/orders";
 import { Users } from "@/services/users";
+import { Trades } from "@/services/trades";
 import { ConfigInterface } from "@/config";
 
 import { ResponseBuilder } from "@/lib/express/responseBuilder";
 import { createAndWrapClasses } from "instawrap";
-import { CLOB } from "@/services/clob";
 
 export interface ServicesInterface {
   records: Orders;
@@ -64,9 +64,9 @@ export class ServiceManager {
     const responseBuilder = new ResponseBuilder({});
 
     const users = new Users();
-    const clob = new CLOB();
+    const trades = new Trades();
     const limits = new Limits({
-      clob,
+      trades,
     });
 
     const records = new Orders({
