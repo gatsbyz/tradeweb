@@ -6,7 +6,7 @@ import {
 } from "@/serviceManager";
 
 import user from "./user";
-import records from "./records";
+import records from "./orders";
 
 export default (
   middleware: ExpressMiddlewareInterface,
@@ -14,7 +14,7 @@ export default (
 ): Router => {
   const router = Router();
   router.use("/user", user(middleware, controllers));
-  router.use("/records", records(middleware, controllers));
+  router.use("/orders", records(middleware, controllers));
 
   return router;
 };

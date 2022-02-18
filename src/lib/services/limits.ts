@@ -43,12 +43,15 @@ export class Limits {
     const limitPrice = order.limitPrice;
     const checkSide = order.side === 'buy' ? 'sell' : 'buy';
 
-    if (!limitEntry[limitPrice.toString()] || !limitEntry[limitPrice.toString()][checkSide]) {
+    if (limitEntry[limitPrice.toString()] && limitEntry[limitPrice.toString()][checkSide]) {
       let checkLimit = limitEntry[limitPrice.toString()][checkSide];
       let filledQuantity = 0;
       let toBeFilledOrder = checkLimit.meta.head;
       while (order.quantity > filledQuantity) {
-        if (order.quantity < (toBeFilledOrder.quantity - toBeFilledOrder.filledQuantity)) {
+        console.log('order', order);
+        console.log('quantity', order.quantity, filledQuantity, toBeFilledOrder.quantity, toBeFilledOrder.filledQuantity);
+        console.log('toBeFilledOrder', toBeFilledOrder);
+        if (order.quantity <= (toBeFilledOrder.quantity - toBeFilledOrder.filledQuantity)) {
           toBeFilledOrder.filledQuantity += order.quantity
           filledQuantity += order.quantity;
           checkLimit.totalQuantity -= order.quantity;
@@ -76,9 +79,11 @@ export class Limits {
           })
 
           toBeFilledOrder = toBeFilledOrder.next;
-          toBeFilledOrder.prev = null;
           checkLimit.meta.head = toBeFilledOrder;
-          if (filledQuantity === 0) {
+          if (toBeFilledOrder) {
+            toBeFilledOrder.prev = null;
+          }
+          if (filledQuantity === 0 && order.quantity > filledQuantity) {
             checkLimit = checkLimit.parent; // more logic here.
           }
         }

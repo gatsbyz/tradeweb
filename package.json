@@ -36,9 +36,6 @@
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-conventional": "^8.3.4",
     "@cucumber/cucumber": "^7.3.2",
-    "@ehacke/commitlint-config": "^1.0.2",
-    "@ehacke/eslint-config": "^1.0.4",
-    "@ehacke/prettier-config": "^1.0.1",
     "@istanbuljs/nyc-config-typescript": "^1.0.1",
     "@types/bluebird": "^3.5.32",
     "@types/chai-as-promised": "^7.1.2",
@@ -106,6 +103,7 @@
     "local:build": "npm run build && node -r dotenv/config dist/start.js dotenv_config_path=.env.local",
     "test": "npm run docker:up && npm run test-all && npm run lint",
     "test-all": "nyc mocha -r ts-node/register -r tsconfig-paths/register --use_strict --exit \"tests/**/*.+(unit|ts).+(ts|js)\"",
+    "test2": "nyc mocha -r ts-node/register -r tsconfig-paths/register --use_strict --exit \"test/**/orders.unit.ts\"",
     "unit": "nyc mocha --recursive -r source-map-support/register -r ts-node/register -r tsconfig-paths/register --use_strict --exit \"tests/**/*.unit.+(ts|js)\""
   }
 }

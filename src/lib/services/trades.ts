@@ -12,8 +12,9 @@ export class Trades {
 
   create(trade: Trade): Trade {
     if (!trade[trade.ticker]) {
-      trade[trade.ticker] = [];
+      this.trades[trade.ticker] = [];
     }
+    // console.log('this.trades', this.trades);
     this.trades[trade.ticker].push(trade);
     return trade;
   }
