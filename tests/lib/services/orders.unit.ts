@@ -3,7 +3,7 @@ import { Limits } from "@/services/Limits";
 import { Orders } from "@/services/orders";
 import { Trades } from "@/services/trades";
 // import sinon from "sinon";
-import { Order, RECORD_TYPE } from "../../../src/lib/models/order";
+import { Order, ORDER_SIDE_TYPE } from "../../../src/lib/models/order";
 
 describe("orders unit test", () => {
   it("found getByToken", async () => {
@@ -34,7 +34,7 @@ describe("orders unit test", () => {
     const order = new Order({
       ticker: 'TW',
       trader: 'trader1',
-      side: RECORD_TYPE.BUY,
+      side: ORDER_SIDE_TYPE.BUY,
       limitPrice: 99.50,
       quantity: 100
     });

@@ -3,7 +3,7 @@ import { Limits } from "@/services/Limits";
 import { Orders } from "@/services/orders";
 import { Trades } from "@/services/trades";
 // import sinon from "sinon";
-import { Order, RECORD_TYPE } from "../../../src/lib/models/order";
+import { Order, ORDER_SIDE_TYPE } from "../../../src/lib/models/order";
 
 describe("limits unit test", () => {
   it("check limit creation", async () => {
@@ -32,7 +32,7 @@ describe("limits unit test", () => {
     const order1 = new Order({
       ticker: 'TW',
       trader: 'trader1',
-      side: RECORD_TYPE.BUY,
+      side: ORDER_SIDE_TYPE.BUY,
       limitPrice: 99.50,
       quantity: 100
     });
@@ -40,7 +40,7 @@ describe("limits unit test", () => {
     const order2 = new Order({
       ticker: 'TW',
       trader: 'trader2',
-      side: RECORD_TYPE.SELL,
+      side: ORDER_SIDE_TYPE.SELL,
       limitPrice: 99.60,
       quantity: 200
     });
@@ -85,7 +85,7 @@ describe("limits unit test", () => {
     const order1 = new Order({
       ticker: 'TW',
       trader: 'trader1',
-      side: RECORD_TYPE.BUY,
+      side: ORDER_SIDE_TYPE.BUY,
       limitPrice: 99.50,
       quantity: 100
     });
@@ -93,7 +93,7 @@ describe("limits unit test", () => {
     const order2 = new Order({
       ticker: 'TW',
       trader: 'trader2',
-      side: RECORD_TYPE.SELL,
+      side: ORDER_SIDE_TYPE.SELL,
       limitPrice: 99.60,
       quantity: 200
     });

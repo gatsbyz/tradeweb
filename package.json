@@ -99,6 +99,7 @@
     "docker:restart": "npm run docker:down && npm run docker:up",
     "docker:up": "COMPOSE_PROJECT_NAME=local docker-compose up -d",
     "lint": "fixpack && prettier-eslint --write && eslint --fix \"**/*.{js,ts}\"",
+    "start": "npm run local",
     "local": "npm run docker:up && ts-node -r tsconfig-paths/register -r dotenv/config src/start.ts dotenv_config_path=.env.local",
     "local:build": "npm run build && node -r dotenv/config dist/start.js dotenv_config_path=.env.local",
     "test": "npm run docker:up && npm run test-all && npm run lint",

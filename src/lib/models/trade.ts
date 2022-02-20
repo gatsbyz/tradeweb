@@ -1,11 +1,6 @@
 import { DateTime } from "luxon";
 import { v4 as uuid } from 'uuid';
 
-export enum RECORD_TYPE {
-  BUY = "buy",
-  SELL = "sell",
-}
-
 interface TradeInterface {
   ticker: string;
   price: number;

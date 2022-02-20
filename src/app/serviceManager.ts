@@ -2,7 +2,6 @@ import * as expressControllers from "@/express/controllers";
 import * as expressMiddleware from "@/express/middleware";
 import { Limits } from "@/services/limits";
 import { Orders } from "@/services/orders";
-import { Users } from "@/services/users";
 import { Trades } from "@/services/trades";
 import { ConfigInterface } from "@/config";
 
@@ -11,17 +10,14 @@ import { createAndWrapClasses } from "instawrap";
 
 export interface ServicesInterface {
   records: Orders;
-  users: Users;
   responseBuilder: ResponseBuilder;
 }
 
 export interface ExpressMiddlewareInterface {
   exceptionHandler: expressMiddleware.ExceptionHandler;
-  user: expressMiddleware.User;
 }
 
 export interface ExpressControllersInterface {
-  user: expressControllers.User;
   orders: expressControllers.Orders;
 }
 
@@ -63,7 +59,6 @@ export class ServiceManager {
   static buildServices(config: ConfigInterface): ServicesInterface {
     const responseBuilder = new ResponseBuilder({});
 
-    const users = new Users();
     const trades = new Trades();
     const limits = new Limits({
       trades,
@@ -76,7 +71,6 @@ export class ServiceManager {
 
     return {
       records,
-      users,
       responseBuilder,
     };
   }
@@ -117,13 +111,12 @@ export class ServiceManager {
     config: ConfigInterface,
     services: ServicesInterface
   ): ExpressMiddlewareInterface {
-    const { responseBuilder, users } = services;
+    const { responseBuilder } = services;
 
     return {
       exceptionHandler: new expressMiddleware.ExceptionHandler({
         responseBuilder,
       }),
-      user: new expressMiddleware.User({ users, responseBuilder }),
     };
   }
 }

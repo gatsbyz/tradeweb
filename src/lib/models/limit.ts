@@ -59,17 +59,6 @@ export class Limit extends ValidatedBase implements LimitInterface {
     color: string | null;
   }
 
-  /**
-   * Create instance of model
-   *
-   * @param {string} ticker
-   * @param {string} trader
-   * @param {RECORD_TYPE} side
-   * @param {number} limit
-   * @param {number} quantity
-   * @param {DateTime} curDate
-   * @returns {Limit}
-   */
   static create(
     limit: LimitInterface,
   ): Limit {

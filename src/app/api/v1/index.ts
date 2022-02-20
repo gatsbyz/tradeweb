@@ -5,7 +5,6 @@ import {
   ExpressMiddlewareInterface,
 } from "@/serviceManager";
 
-import user from "./user";
 import records from "./orders";
 
 export default (
@@ -13,7 +12,6 @@ export default (
   controllers: ExpressControllersInterface
 ): Router => {
   const router = Router();
-  router.use("/user", user(middleware, controllers));
   router.use("/orders", records(middleware, controllers));
 
   return router;

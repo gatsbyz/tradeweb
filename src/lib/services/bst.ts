@@ -11,10 +11,9 @@ export class BinarySearchTree {
 
   // when order is sell
   searchGreater(n, x, best_so_far) { //  Find number nearest and greater than the key
-
     if (!n) {
       return best_so_far;
-    } else if (n.value == x) {
+    } else if (n.value === x) {
       return x;
     } else if (n.value > x) {
       return this.searchGreater(n.left, x, Math.min(best_so_far, n.value));
@@ -23,8 +22,8 @@ export class BinarySearchTree {
     }
   }
 
-  // when order is sell
-  searchLess(n, x, best_so_far) { //  Find number nearest and greater than the key
+  // when order is buy
+  searchLess(n, x, best_so_far) { //  Find number nearest and less than the key
     if (!n) {
       return best_so_far;
     } else if (n.value == x) {

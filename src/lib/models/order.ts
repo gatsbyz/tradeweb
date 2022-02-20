@@ -3,7 +3,7 @@ import { toDate } from "simple-cached-firestore";
 import { v4 as uuid } from 'uuid';
 import {Limit} from "@/models/limit";
 
-export enum RECORD_TYPE {
+export enum ORDER_SIDE_TYPE {
   BUY = "buy",
   SELL = "sell",
 }
@@ -11,7 +11,7 @@ export enum RECORD_TYPE {
 interface OrderInterface {
   ticker: string;
   trader: string;
-  side: RECORD_TYPE;
+  side: ORDER_SIDE_TYPE;
   limitPrice: number;
   quantity: number;
 }
@@ -46,7 +46,7 @@ export class Order implements OrderInterface {
 
   trader: string;
 
-  side: RECORD_TYPE;
+  side: ORDER_SIDE_TYPE;
 
   limitPrice: number;
 
@@ -65,4 +65,9 @@ export class Order implements OrderInterface {
   createdAt: Date;
 
   updatedAt: Date;
+
+
+  setNext(node) {
+    this.next = node;
+  }
 }

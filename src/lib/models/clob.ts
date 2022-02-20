@@ -28,7 +28,7 @@ export class CLOB extends ValidatedBase implements CLOBInterface {
    *
    * @param {string} ticker
    * @param {string} trader
-   * @param {RECORD_TYPE} side
+   * @param {ORDER_SIDE_TYPE} side
    * @param {number} limit
    * @param {number} quantity
    * @param {DateTime} curDate
