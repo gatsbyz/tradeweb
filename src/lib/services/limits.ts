@@ -53,8 +53,14 @@ export class Limits {
     } else {
       // find nearest value
       const treeToLook = checkSide === 'buy' ? this.buyTree : this.sellTree;
-      const value = treeToLook.searchGreater(treeToLook.root, order.limitPrice, Number.POSITIVE_INFINITY);
-      if (value < Number.POSITIVE_INFINITY) {
+      let value;
+      if (checkSide === 'buy') {
+        value = treeToLook.searchGreater(treeToLook.root, order.limitPrice, Number.POSITIVE_INFINITY);
+      } else {
+        value = treeToLook.searchLess(treeToLook.root, order.limitPrice, Number.NEGATIVE_INFINITY);
+      }
+      if (checkSide === 'buy' && value < Number.POSITIVE_INFINITY ||
+        checkSide === 'sell' && value > Number.NEGATIVE_INFINITY ) {
         checkLimit = limitEntry[value][checkSide];
         toBeFilledOrder = checkLimit.head;
       }
@@ -95,9 +101,11 @@ export class Limits {
               toBeFilledOrder.prev = null;
             }
             // console.log('toBeFilledOrder', toBeFilledOrder, checkLimit, filledQuantity);
-            if (checkLimit.totalQuantity === 0 && order.quantity > filledQuantity) {
-              checkLimit = checkLimit.right ? checkLimit.right : checkLimit.parent; // more logic here.
-              toBeFilledOrder = checkLimit.head;
+            if (checkLimit.totalQuantity === 0 && order.quantity > filledQuantity) { //  add logic for SSS B sweep
+              checkLimit = checkLimit.right ? checkLimit.right : checkLimit.parent;
+              if (checkLimit) {
+                toBeFilledOrder = checkLimit.head;
+              }
             }
           }
         }

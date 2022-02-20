@@ -25,15 +25,14 @@ export class BinarySearchTree {
 
   // when order is sell
   searchLess(n, x, best_so_far) { //  Find number nearest and greater than the key
-
     if (!n) {
       return best_so_far;
     } else if (n.value == x) {
       return x;
     } else if (n.value > x) {
-      return this.searchLess(n.left, x, Math.min(best_so_far, n.value));
+      return this.searchLess(n.left, x, best_so_far);
     } else if (n.value < x) {
-      return this.searchLess(n.right, x, best_so_far)
+      return this.searchLess(n.right, x, Math.max(best_so_far, n.value))
     }
   }
 
