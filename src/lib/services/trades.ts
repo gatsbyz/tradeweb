@@ -1,7 +1,8 @@
 import { Trade } from "@/models/trade";
 
 export class Trades {
-  trades: Record<string, Trade[]> = {};
+  tradeLink: Record<string, string[]> = {};
+  trades: Record<string, Trade> = {};
 
   /**
    * @param {ServiceInterface} services
@@ -11,16 +12,19 @@ export class Trades {
   }
 
   create(trade: Trade): Trade {
-    if (!trade[trade.ticker]) {
-      this.trades[trade.ticker] = [];
+    this.trades[trade.id] = trade;
+    if (!this.tradeLink[trade.buyer]) {
+      this.tradeLink[trade.buyer] = [];
     }
-    // console.log('this.trades', this.trades);
-    this.trades[trade.ticker].push(trade);
+    if (!this.tradeLink[trade.seller]) {
+      this.tradeLink[trade.seller] = [];
+    }
+    this.tradeLink[trade.buyer].push(trade.id);
+    this.tradeLink[trade.seller].push(trade.id);
     return trade;
   }
 
-  async get(id: string): Promise<Trade | null> {
-    // return this.services.firestore.get(id);
-    return null;
+  get(trader: string): Trade[] {
+    return this.tradeLink[trader].map(id => this.trades[id]);
   }
 }

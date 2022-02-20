@@ -8,17 +8,35 @@ export class BinarySearchTree {
     this.root = null;
     this.size = 0;
   }
-  // end::snippet[]
 
-  // tag::add[]
-  /**
-   * Insert value on the BST.
-   *
-   * If the value is already in the tree,
-   * then it increases the multiplicity value
-   * @param {any} value node's value to insert in the tree
-   * @returns {BinaryTreeNode} newly added node
-   */
+  // when order is sell
+  searchGreater(n, x, best_so_far) { //  Find number nearest and greater than the key
+
+    if (!n) {
+      return best_so_far;
+    } else if (n.value == x) {
+      return x;
+    } else if (n.value > x) {
+      return this.searchGreater(n.left, x, Math.min(best_so_far, n.value));
+    } else if (n.value < x) {
+      return this.searchGreater(n.right, x, best_so_far)
+    }
+  }
+
+  // when order is sell
+  searchLess(n, x, best_so_far) { //  Find number nearest and greater than the key
+
+    if (!n) {
+      return best_so_far;
+    } else if (n.value == x) {
+      return x;
+    } else if (n.value > x) {
+      return this.searchLess(n.left, x, Math.min(best_so_far, n.value));
+    } else if (n.value < x) {
+      return this.searchLess(n.right, x, best_so_far)
+    }
+  }
+
   add(node) {
     // let node = new BinaryTreeNode(value);
     const value = node.value;
@@ -39,35 +57,15 @@ export class BinarySearchTree {
     this.size += 1;
     return node;
   }
-  // end::add[]
 
-  /**
-   * Find if a node is present or not
-   * @param {any} value node to find
-   * @returns {boolean} true if is present, false otherwise
-   */
   has(value) {
     return !!this.find(value);
   }
 
-  // tag::find[]
-  /**
-   * @param {any} value value to find
-   * @returns {BinaryTreeNode|null} node if it found it or null if not
-   */
   find(value) {
     return this.findNodeAndParent(value).found;
   }
 
-
-  /**
-   * Recursively finds the node matching the value.
-   * If it doesn't find, it returns the leaf `parent` where the new value should be appended.
-   * @param {any} value Node's value to find
-   * @param {BinaryTreeNode} node first element to start the search (root is default)
-   * @param {BinaryTreeNode} parent keep track of parent (usually filled by recursion)
-   * @returns {object} node and its parent like {node, parent}
-   */
   findNodeAndParent(value, node = this.root, parent?) {
     if (!node || node.value === value) {
       return { found: node, parent };
@@ -124,13 +122,7 @@ export class BinarySearchTree {
     }
     return node.left;
   }
-  // end::combine[]
 
-  // tag::bfs[]
-  /**
-   * Breath-first search for a tree (always starting from the root element).
-   * @yields {BinaryTreeNode}
-   */
   bfs() {
     const queue: BinaryTreeNode[] = [];
 

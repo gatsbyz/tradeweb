@@ -48,9 +48,9 @@ describe("limits unit test", () => {
     orders.create(order1)
     orders.create(order2)
 
-    console.log(services.limits.buyTree);
-    console.log(services.limits.sellTree);
-    console.log(services.limits.limitTable);
+    // console.log(services.limits.buyTree);
+    // console.log(services.limits.sellTree);
+    // console.log(services.limits.limitTable);
 
     // expect(await orders.getByToken("token")).to.eql(user);
     // expect(getStub.args).to.eql([["user-id"]]);
@@ -101,9 +101,9 @@ describe("limits unit test", () => {
     orders.create(order1)
     orders.create(order2)
 
-    console.log(services.limits.buyTree);
-    console.log(services.limits.sellTree);
-    console.log(services.limits.limitTable);
+    // console.log(services.limits.buyTree);
+    // console.log(services.limits.sellTree);
+    // console.log(services.limits.limitTable);
 
     // expect(await orders.getByToken("token")).to.eql(user);
     // expect(getStub.args).to.eql([["user-id"]]);

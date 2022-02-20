@@ -1,4 +1,5 @@
 import { DateTime } from "luxon";
+import { v4 as uuid } from 'uuid';
 
 export enum RECORD_TYPE {
   BUY = "buy",
@@ -24,12 +25,15 @@ export class Trade implements TradeInterface {
   constructor(params: TradeInterface) {
     // ticker | price | quantity | buyer | seller |
 
+    this.id = uuid();
     this.ticker = params.ticker;
     this.price = params.price;
     this.quantity = params.quantity;
     this.buyer = params.buyer;
     this.seller = params.seller;
   }
+
+  id: string;
 
   ticker: string;
 

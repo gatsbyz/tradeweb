@@ -3,6 +3,7 @@ import { Limit as LimitModel } from "@/models/limit";
 
 import { RedBlackTree } from "@/services/redblacktree";
 import { Trades } from "@/services/trades";
+import { Trade } from "@/models/trade";
 
 interface ServiceInterface {
   trades: Trades;
@@ -43,51 +44,66 @@ export class Limits {
     const limitPrice = order.limitPrice;
     const checkSide = order.side === 'buy' ? 'sell' : 'buy';
 
+    let filledQuantity = 0;
+    let checkLimit;
+    let toBeFilledOrder
     if (limitEntry[limitPrice.toString()] && limitEntry[limitPrice.toString()][checkSide]) {
-      let checkLimit = limitEntry[limitPrice.toString()][checkSide];
-      let filledQuantity = 0;
-      let toBeFilledOrder = checkLimit.meta.head;
-      while (order.quantity > filledQuantity) {
-        console.log('order', order);
-        console.log('quantity', order.quantity, filledQuantity, toBeFilledOrder.quantity, toBeFilledOrder.filledQuantity);
-        console.log('toBeFilledOrder', toBeFilledOrder);
-        if (order.quantity <= (toBeFilledOrder.quantity - toBeFilledOrder.filledQuantity)) {
+      checkLimit = limitEntry[limitPrice.toString()][checkSide];
+      toBeFilledOrder = checkLimit.head;
+    } else {
+      // find nearest value
+      const treeToLook = checkSide === 'buy' ? this.buyTree : this.sellTree;
+      const value = treeToLook.searchGreater(treeToLook.root, order.limitPrice, Number.POSITIVE_INFINITY);
+      if (value < Number.POSITIVE_INFINITY) {
+        checkLimit = limitEntry[value][checkSide];
+        toBeFilledOrder = checkLimit.head;
+      }
+    }
+    while (order.quantity > filledQuantity && toBeFilledOrder) {
+        if (order.quantity < (toBeFilledOrder.quantity - toBeFilledOrder.filledQuantity)) {
           toBeFilledOrder.filledQuantity += order.quantity
           filledQuantity += order.quantity;
           checkLimit.totalQuantity -= order.quantity;
           order.filledQuantity += order.quantity;
           // break
-          this.services.trades.create({
+          this.services.trades.create(new Trade({
             ticker: order.ticker,
             price: order.limitPrice,
             quantity: order.quantity,
             buyer: order.side === 'buy' ? order.trader : toBeFilledOrder.trader,
             seller: order.side === 'sell' ? order.trader : toBeFilledOrder.trader,
-          })
+          }))
         } else {
-          toBeFilledOrder.filledQuantity = toBeFilledOrder.quantity;
-          toBeFilledOrder.status = 'completed'
-          filledQuantity += (toBeFilledOrder.quantity - toBeFilledOrder.filledQuantity);
-          checkLimit.totalQuantity -= (toBeFilledOrder.quantity - toBeFilledOrder.filledQuantity);
-          order.filledQuantity += (toBeFilledOrder.quantity - toBeFilledOrder.filledQuantity);
-          this.services.trades.create({
+          const newAddedQuantity = toBeFilledOrder.quantity - toBeFilledOrder.filledQuantity;
+          toBeFilledOrder.filledQuantity = toBeFilledOrder.quantity; // fill to end
+          toBeFilledOrder.status = 'completed';
+          filledQuantity += newAddedQuantity;
+          checkLimit.totalQuantity -= newAddedQuantity;
+          order.filledQuantity += newAddedQuantity;
+          this.services.trades.create(new Trade({
             ticker: order.ticker,
-            price: order.limitPrice,
-            quantity: (toBeFilledOrder.quantity - toBeFilledOrder.filledQuantity),
+            price: toBeFilledOrder.limitPrice,
+            quantity: newAddedQuantity,
             buyer: order.side === 'buy' ? order.trader : toBeFilledOrder.trader,
             seller: order.side === 'sell' ? order.trader : toBeFilledOrder.trader,
-          })
+          }))
 
-          toBeFilledOrder = toBeFilledOrder.next;
-          checkLimit.meta.head = toBeFilledOrder;
-          if (toBeFilledOrder) {
-            toBeFilledOrder.prev = null;
-          }
-          if (filledQuantity === 0 && order.quantity > filledQuantity) {
-            checkLimit = checkLimit.parent; // more logic here.
+          if (order.quantity > filledQuantity) {
+            toBeFilledOrder = toBeFilledOrder.next;
+            checkLimit.setHead(toBeFilledOrder);
+            if (toBeFilledOrder) {
+              toBeFilledOrder.prev = null;
+            }
+            // console.log('toBeFilledOrder', toBeFilledOrder, checkLimit, filledQuantity);
+            if (checkLimit.totalQuantity === 0 && order.quantity > filledQuantity) {
+              checkLimit = checkLimit.right ? checkLimit.right : checkLimit.parent; // more logic here.
+              toBeFilledOrder = checkLimit.head;
+            }
           }
         }
       }
+    if (order.quantity === filledQuantity) {
+      order.status = 'completed';
     }
   }
 
@@ -97,15 +113,16 @@ export class Limits {
     }
     const limitEntry = this.limitTable[order.ticker];
     const limitPrice = order.limitPrice;
-    const newLimit: LimitModel = LimitModel.create({
-      limitPrice
-    });
     this.checkOrder(order);
     if (!limitEntry[limitPrice.toString()] || !limitEntry[limitPrice.toString()][order.side]) {
-      newLimit.meta.head = order;
-      newLimit.meta.tail = order;
+      const newLimit: LimitModel = LimitModel.create({
+        limitPrice
+      });
+      newLimit.setHead(order);
+      newLimit.setTail(order);
       newLimit.totalQuantity = order.quantity - order.filledQuantity;
       limitEntry[limitPrice.toString()] = {
+        ...limitEntry[limitPrice.toString()],
         [order.side]: newLimit
       };
       // add to limit tree
@@ -115,7 +132,7 @@ export class Limits {
         this.sellTree.add(newLimit);
       }
     } else { // if order is open ...?
-      limitEntry[limitPrice.toString()][order.side].meta.tail.next = order;
+      limitEntry[limitPrice.toString()][order.side].getTail().setNext(order);
       limitEntry[limitPrice.toString()][order.side].totalQuantity += (order.quantity - order.filledQuantity);
       order.prev = limitEntry[limitPrice.toString()][order.side].tail;
     }

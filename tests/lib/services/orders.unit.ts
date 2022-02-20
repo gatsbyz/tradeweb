@@ -39,7 +39,7 @@ describe("orders unit test", () => {
       quantity: 100
     });
 
-    console.log(orders.create(order))
+    (orders.create(order))
 
     // expect(await orders.getByToken("token")).to.eql(user);
     // expect(getStub.args).to.eql([["user-id"]]);

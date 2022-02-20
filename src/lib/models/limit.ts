@@ -27,9 +27,10 @@ export class Limit extends ValidatedBase implements LimitInterface {
     this.right = null;
     this.parent = null;
     this.parentSide = null;
+    this.head = null;
+    this.tail = null;
+
     this.meta = {
-      head: null,
-      tail: null,
       color: null
     };
   }
@@ -49,10 +50,11 @@ export class Limit extends ValidatedBase implements LimitInterface {
 
   parentSide: string | null;
 
-  meta: {
-    head: Order | null;
+  head: Order | null;
 
-    tail: Order | null;
+  tail: Order | null;
+
+  meta: {
 
     color: string | null;
   }
@@ -72,6 +74,18 @@ export class Limit extends ValidatedBase implements LimitInterface {
     limit: LimitInterface,
   ): Limit {
     return new Limit(limit.limitPrice);
+  }
+
+  setHead(node) {
+    this.head = node;
+  }
+
+  setTail(node) {
+    this.tail = node;
+  }
+
+  getTail(): Order | null {
+    return this.tail;
   }
 
   setLeftAndUpdateParent(node) {
