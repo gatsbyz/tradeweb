@@ -5,14 +5,11 @@ import {
   ExpressMiddlewareInterface,
 } from "@/serviceManager";
 
-import orders from "./orders";
-
 export default (
   middleware: ExpressMiddlewareInterface,
   controllers: ExpressControllersInterface
 ): Router => {
   const router = Router();
-  router.use("/trades", orders(middleware, controllers));
-
+  router.get("/:traderId", controllers.trades.getTrades);
   return router;
 };

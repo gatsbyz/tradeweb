@@ -19,6 +19,7 @@ export interface ExpressMiddlewareInterface {
 
 export interface ExpressControllersInterface {
   orders: expressControllers.Orders;
+  trades: expressControllers.Trades;
 }
 
 /**
