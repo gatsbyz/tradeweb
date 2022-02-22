@@ -4,11 +4,13 @@ import { Orders } from "@/services/orders";
 import { Trades } from "@/services/trades";
 // import sinon from "sinon";
 import { Order, ORDER_SIDE_TYPE } from "../../../src/lib/models/order";
+import { Book } from "../../../src/lib/services/book";
 
 describe("orders unit test", () => {
   it("found getByToken", async () => {
     const LimitServices = {
       trades: new Trades(),
+      book: new Book(),
     };
 
     const services = {

@@ -4,11 +4,13 @@ import { Orders } from "@/services/orders";
 import { Trades } from "@/services/trades";
 // import sinon from "sinon";
 import { Order, ORDER_SIDE_TYPE } from "../../../src/lib/models/order";
+import { Book } from "../../../src/lib/services/book";
 
 describe("trades unit test", () => {
   it("check no trade created", async () => {
     const LimitServices = {
       trades: new Trades(),
+      book: new Book(),
     };
 
     const services = {
@@ -54,6 +56,7 @@ describe("trades unit test", () => {
   it("Two tradable orders result in a trade", async () => {
     const LimitServices = {
       trades: new Trades(),
+      book: new Book(),
     };
 
     const services = {
@@ -114,6 +117,7 @@ describe("trades unit test", () => {
   it("Two tradable orders with different quantities are partially filled", async () => {
     const LimitServices = {
       trades: new Trades(),
+      book: new Book(),
     };
 
     const services = {
@@ -174,6 +178,7 @@ And the following trades are created:
   it("A valid single buy order is able to sweep the book", async () => {
     const LimitServices = {
       trades: new Trades(),
+      book: new Book(),
     };
 
     const services = {
@@ -279,6 +284,7 @@ And the following trades are created:
   it("A valid single sell order is able to sweep the book", async () => {
     const LimitServices = {
       trades: new Trades(),
+      book: new Book(),
     };
 
     const services = {

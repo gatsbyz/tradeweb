@@ -1,5 +1,6 @@
 import * as expressControllers from "@/express/controllers";
 import * as expressMiddleware from "@/express/middleware";
+import { Book } from "@/services/book";
 import { Limits } from "@/services/limits";
 import { Orders } from "@/services/orders";
 import { Trades } from "@/services/trades";
@@ -20,6 +21,7 @@ export interface ExpressMiddlewareInterface {
 export interface ExpressControllersInterface {
   orders: expressControllers.Orders;
   trades: expressControllers.Trades;
+  book: expressControllers.Book;
 }
 
 /**
@@ -61,8 +63,10 @@ export class ServiceManager {
     const responseBuilder = new ResponseBuilder({});
 
     const trades = new Trades();
+    const book = new Book();
     const limits = new Limits({
       trades,
+      book,
     });
 
     const records = new Orders({
